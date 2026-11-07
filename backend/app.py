@@ -64,7 +64,54 @@ def get_alerts():
         return jsonify({"error": "Enter a valid 5 digit ZIP code."}), 400  
 
     try: 
-        zip_response = requests.get(f"https:", )
+        zip_response = requests.get(f"https://api.zippopotam.us/us/{zip_code}", timeout = 10 )
+        if zip_response.status_code == 404:
+            return jsonify({"error": "ZIP code not found."}), 404
+        zip_response.raise_for_status()
+
+        place = zip_response.json()["places"][0]
+        latitude = round(float(place["latitude"]), 4)
+        longitude = round(float(place["longitude"]), 4)
+
+        nws_response = requests.get(
+            "https://api.weather.gov/alerts/active",
+            params = {"point": f"{latitude}, {latitude}"}, 
+            headers = {
+                "User-Agent": "Areacane/1.0 (sharkbyteproject2026@gmail.com)",
+                "Accept": "application/geo+json", 
+            }, 
+            timeout = 10,
+        )
+
+        nws_response.raise_for_status()
+
+        alerts = []
+        for feature in nws_response.json().get("features", []):
+            details = feature.get("properties", {})
+            event = details.get("event", " ")
+            if event.lower() in TROPICAL_EVENTS:
+                alerts.append({
+                    "event": event,
+                    "headline": details.get("headline"),
+                    "area": details.get("areaDesc"),
+                    "severity": details.get("severity"),
+                    "description": details.get("description"),
+                    "source": "National Weather Service",
+                    "api_url": feature.get("id"),
+                })
+
+            return jsonify({
+
+                "zip_code": zip_code,
+                "location": {
+                    "city": place["place name"],
+                    "state": place["state"],
+                    "latitude": latitude,
+                    "longitude": longitude,
+                },
+                 "number_of_alerts": len(alerts),
+                 "alerts": alerts,
+            })        
 
     except requests.RequestException:
         return jsonify({"error": "Unable to retrieve weather alerts. Try Again."}), 502
