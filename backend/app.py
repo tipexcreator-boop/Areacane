@@ -17,9 +17,9 @@ MAX_ALERT_LENGTH = 5000
 def health():
     return jsonify({"message": "Areacane backend is running"})
 
-@app.route("/api/verify", method = ["POST"])
+@app.route("/api/verify", methods= ["POST"])
 def verify():
-    data = request.get.json(silent = True) or {}
+    data = request.get_json(silent = True) or {}
     alert = data.get("alert_text")
 
     if not isinstance(alert,str) or not alert.strip():
@@ -41,6 +41,6 @@ def verify():
     })
 
 if __name__ == "__main__":
-    app.run(debug = os.environ.get("FLASK_DEBUG") == "1", port = 5000)
+    app.run(debug = os.environ.get("FLASK_DEBUG") == "1", port = 5001)
 
     
