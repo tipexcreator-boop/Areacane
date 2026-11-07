@@ -14,7 +14,7 @@ app = Flask(__name__)
 allowed_origins = os.environ.get("ALLOWED_ORIGINS", "http://localhost:3000").split(",")
 CORS(app, origins = allowed_origins)
 
-MAX_ALERT_LENGTH = 5000 
+MAX_ALERT_LENGTH = 5000
 
 # displays message when server runs successfully.
 @app.route("/api/health", methods = ["GET"]) 
@@ -75,7 +75,7 @@ def get_alerts():
 
         nws_response = requests.get(
             "https://api.weather.gov/alerts/active",
-            params = {"point": f"{latitude}, {latitude}"}, 
+            params = {"point": f"{latitude},{longitude}"}, 
             headers = {
                 "User-Agent": "Areacane/1.0 (sharkbyteproject2026@gmail.com)",
                 "Accept": "application/geo+json", 
@@ -113,11 +113,12 @@ def get_alerts():
                  "alerts": alerts,
             })        
 
-    except requests.RequestException:
+    except requests.RequestException as e:
+        app.logger.error("Request failed: %s", e)
         return jsonify({"error": "Unable to retrieve weather alerts. Try Again."}), 502
     
     except (KeyError, IndexError, ValueError):
-        return jsonify ({}), 502
+        return jsonify ({"error": "Unable to process location information."}), 502
 
 
 
