@@ -11,7 +11,7 @@ app = Flask(__name__)
 allowed_origins = os.environ.get("ALLOWED_ORIGINS", "http://localhost:3000").split(",")
 CORS(app, origins = allowed_origins)
 
-MAX_ALERT_LENGTH = 5000
+MAX_ALERT_LENGTH = 5000 
 
 
 
