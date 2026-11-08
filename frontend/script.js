@@ -1,3 +1,5 @@
+
+
 const API_URL = "https://areacane.onrender.com/api/alerts";
 
 const form = document.getElementById("zip-form");
