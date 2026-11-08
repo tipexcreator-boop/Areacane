@@ -52,6 +52,7 @@ TROPICAL_EVENTS = {
     "hurricane warning", "hurricane watch", "hurricane local statement", 
     "tropical storm warning", "tropical storm watch", 
     "storm surge warning", "storm surge watch", "extreme wind warning",
+    "costal flood statement",
 
 }
 
