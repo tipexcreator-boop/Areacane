@@ -52,7 +52,7 @@ TROPICAL_EVENTS = {
     "hurricane warning", "hurricane watch", "hurricane local statement", 
     "tropical storm warning", "tropical storm watch", 
     "storm surge warning", "storm surge watch", "extreme wind warning",
-    "costal flood statement",
+    "coastal flood statement",
 
 }
 
@@ -96,6 +96,8 @@ def get_alerts():
                     "headline": details.get("headline"),
                     "area": details.get("areaDesc"),
                     "severity": details.get("severity"),
+                    "expires": details.get("expires"),
+                    "instruction": details.get("instruction"),
                     "description": details.get("description"),
                     "source": "National Weather Service",
                     "api_url": feature.get("id"),
