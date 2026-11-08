@@ -100,25 +100,25 @@ def get_alerts():
                     "api_url": feature.get("id"),
                 })
 
-            return jsonify({
+        return jsonify({
 
-                "zip_code": zip_code,
-                "location": {
-                    "city": place["place name"],
-                    "state": place["state"],
-                    "latitude": latitude,
-                    "longitude": longitude,
-                },
-                 "number_of_alerts": len(alerts),
-                 "alerts": alerts,
-            })        
+            "zip_code": zip_code,
+            "location": {
+                "city": place["place name"],
+                "state": place["state"],
+                "latitude": latitude,
+                "longitude": longitude,
+             },
+            "number_of_alerts": len(alerts),
+            "alerts": alerts,
+        })        
 
     except requests.RequestException as e:
         app.logger.error("Request failed: %s", e)
         return jsonify({"error": "Unable to retrieve weather alerts. Try Again."}), 502
     
     except (KeyError, IndexError, ValueError):
-        return jsonify ({"error": "Unable to process location information."}), 502
+        return jsonify({"error": "Unable to process location information."}), 502
 
 
 
